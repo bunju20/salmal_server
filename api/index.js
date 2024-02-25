@@ -1,4 +1,11 @@
+import { JWT } from 'google-auth-library';
+import dayjs from 'dayjs';
+import express from 'express';
+import { GoogleSpreadsheet } from 'google-spreadsheet';
+
+
 const { GoogleSpreadsheet } = require('google-spreadsheet');
+
 
 // 스프레드시트 인증 및 초기화 함수
 async function authenticateGoogleSpreadsheet() {
