@@ -2,11 +2,15 @@ const { GoogleSpreadsheet } = require('google-spreadsheet');
 
 // 스프레드시트 인증 및 초기화 함수
 async function authenticateGoogleSpreadsheet() {
-    const doc = new GoogleSpreadsheet(process.env.GOOGLE_SPREADSHEET_ID);
-    await doc.useServiceAccountAuth({
-        client_email: process.env.GOOGLE_CLOUD_CLIENT_EMAIL,
-        private_key: process.env.GOOGLE_CLOUD_PRIVATE_KEY.replace(/\\n/g, '\n'),
-    });
+
+  const serviceAccountAuth = new JWT({
+    email: process.env.GOOGLE_CLOUD_CLIENT_EMAIL,
+    key: process.env.GOOGLE_CLOUD_PRIVATE_KEY,
+    scopes: [
+        'https://www.googleapis.com/auth/spreadsheets',
+    ],
+});
+    const doc = new GoogleSpreadsheet(process.env.GOOGLE_SPREADSHEET_ID,serviceAccountAuth);
     await doc.loadInfo(); // 문서 정보 로드
     return doc;
 }
