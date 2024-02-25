@@ -1,9 +1,8 @@
-import { JWT } from 'google-auth-library';
 import dayjs from 'dayjs';
 import express from 'express';
-import { GoogleSpreadsheet } from 'google-spreadsheet';
 
 
+const {JWT} = require('google-auth-library');
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 
 
