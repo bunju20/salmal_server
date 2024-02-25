@@ -11,7 +11,7 @@ async function authenticateGoogleSpreadsheet() {
 
   const serviceAccountAuth = new JWT({
     email: process.env.GOOGLE_CLOUD_CLIENT_EMAIL,
-    key: process.env.GOOGLE_CLOUD_PRIVATE_KEY,
+    key: process.env.GOOGLE_CLOUD_PRIVATE_KEY.replace(/\\n/g, '\n'),
     scopes: [
         'https://www.googleapis.com/auth/spreadsheets',
     ],
