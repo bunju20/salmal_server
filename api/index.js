@@ -8,17 +8,29 @@ app.use(express.json()); // JSON 요청 본문을 파싱하기 위해 필요
 
 const serviceAccountAuth = new JWT({
   email: process.env.GOOGLE_CLOUD_PRIVATE_EMAIL,
-  key: process.env.GOOGLE_CLOUD_PRIVATE_KEY,
+  key: process.env.GOOGLE_CLOUD_PRIVATE_KEY.replace(/\\n/g, '\n'), // 개행 문자 처리
   scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 });
 
-app.post('/update', async (req, res) => {
-    const json = req.body; // Express를 사용하여 요청 본문 접근
+const doc = new GoogleSpreadsheet(process.env.GOOGLE_SPREADSHEET_ID);
+await doc.useServiceAccountAuth({
+  client_email: process.env.GOOGLE_CLOUD_PRIVATE_EMAIL,
+  private_key: process.env.GOOGLE_CLOUD_PRIVATE_KEY.replace(/\\n/g, '\n'),
+});
 
-    const spreadsheet = new GoogleSpreadsheet(process.env.GOOGLE_SPREADSHEET_ID, serviceAccountAuth);
+
+app.post('/update', async (req, res) => {
+  try {
+    const json = req.body;
+
+    const spreadsheet = new GoogleSpreadsheet(process.env.GOOGLE_SPREADSHEET_ID);
+    await spreadsheet.useServiceAccountAuth({
+      client_email: process.env.GOOGLE_CLOUD_PRIVATE_EMAIL,
+      private_key: process.env.GOOGLE_CLOUD_PRIVATE_KEY.replace(/\\n/g, '\n'),
+    });
     await spreadsheet.loadInfo();
 
-    const sheet = spreadsheet.sheetsByTitle["salmal심테"]; // 시트 이름 확인
+    const sheet = spreadsheet.sheetsByTitle["salmal심테"];
     await sheet.addRow({
       나이: json.age,
       성별: json.gender,
@@ -28,8 +40,9 @@ app.post('/update', async (req, res) => {
       공유버튼여부: json.shareButton,
     });
 
-    res.json({ message: "처리되었습니다." }); // Express 응답 메소드 사용
+    res.json({ message: "처리되었습니다." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "서버 오류 발생" });
+  }
 });
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
