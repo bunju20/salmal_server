@@ -18,6 +18,8 @@ async function authenticateGoogleSpreadsheet() {
 });
     const doc = new GoogleSpreadsheet(process.env.GOOGLE_SPREADSHEET_ID,serviceAccountAuth);
     await doc.loadInfo(); // 문서 정보 로드
+    console.log(Object.keys(doc.sheetsByTitle)); // 로드된 모든 시트의 제목을 출력
+
     return doc;
 }
 
@@ -32,7 +34,7 @@ module.exports = async (req, res) => {
         const doc = await authenticateGoogleSpreadsheet();
         
         // 특정 시트 선택 (여기서는 시트 제목이 'salmal심테')
-        const sheet = doc.sheetsById(process.env.GOOGLE_SPREADSHEET_ID);
+        const sheet = doc.sheetsByTitle["salmal"];
         if (!sheet) {
             return res.status(404).json({ message: "Sheet not found" });
         }
@@ -55,3 +57,6 @@ module.exports = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
 };
+
+
+
