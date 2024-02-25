@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
         const doc = await authenticateGoogleSpreadsheet();
         
         // 특정 시트 선택 (여기서는 시트 제목이 'salmal심테')
-        const sheet = doc.sheetsByTitle["salmal심테"];
+        const sheet = doc.sheetsByTitle["salmal"];
         if (!sheet) {
             return res.status(404).json({ message: "Sheet not found" });
         }
