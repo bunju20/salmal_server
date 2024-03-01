@@ -8,8 +8,11 @@ const app = express();
 const cors = require('cors');
 
 app.use(cors({
-    origin: 'https://salkka-malkka.vercel.app'
-  }));
+    origin: 'https://salkka-malkka.vercel.app', // 요청을 허용할 도메인
+    methods: ['GET', 'POST', 'OPTIONS'], // 허용할 HTTP 메서드
+    allowedHeaders: ['Content-Type', 'Authorization'] // 허용할 HTTP 헤더
+}));
+
   
 // 스프레드시트 인증 및 초기화 함수
 async function authenticateGoogleSpreadsheet() {
