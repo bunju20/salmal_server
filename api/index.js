@@ -1,11 +1,14 @@
 import dayjs from 'dayjs';
 import express from 'express';
-
-
+import cors from 'cors';
 const {JWT} = require('google-auth-library');
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 
+// Express 앱 생성
+const app = express();
 
+// CORS 미들웨어 사용 설정
+app.use(cors());
 // 스프레드시트 인증 및 초기화 함수
 async function authenticateGoogleSpreadsheet() {
 
