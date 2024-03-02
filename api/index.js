@@ -59,6 +59,8 @@ module.exports = async (req, res) => {
         rows.forEach(row => {
             console.log(row.uid);
         });
+        console.log(sheet.headerValues);
+
 
         if (existingRow) {
             // 일치하는 행이 있는 경우, 해당 행 업데이트
