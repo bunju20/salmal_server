@@ -57,14 +57,12 @@ module.exports = async (req, res) => {
 
         if (existingRow) {
             // 일치하는 행이 있는 경우, 해당 행 업데이트
-            Object.keys(json).forEach(key => {
-                console.log(key);
-                console.log(json[key]);
-                console.log(existingRow._rawData[0]);
-                existingRow[key] = json[key];
-                console.log(existingRow._rawData[0]);
-                
-            });
+            for(let i = 0; i < existingRow._rawData.length; i++){
+                key = existingRow._sheet.headerValues[i];
+                console.log(existingRow._rawData[i]);
+                existingRow._rawData[i] = json[key];
+                console.log(key, json[key]);
+            }
             await existingRow.save(); // 변경 사항 저장
         } else {
             // 일치하는 uid가 없는 경우, 새로운 행 추가
