@@ -34,42 +34,58 @@ async function authenticateGoogleSpreadsheet() {
 // Vercel 서버리스 함수
 module.exports = async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*'); // 모든 출처 허용
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'); // 허용 메소드
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // 허용 헤더
-  if (req.method === 'OPTIONS') {
-    // OPTIONS 요청에 대한 응답
-    return res.status(200).end();
-  }
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'); // 허용 메소드
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // 허용 헤더
+    if (req.method === 'OPTIONS') {
+        // OPTIONS 요청에 대한 응답
+        return res.status(200).end();
+    }
 
     try {
         const json = req.body;
         const doc = await authenticateGoogleSpreadsheet();
         
-        // 특정 시트 선택 (여기서는 시트 제목이 'salmal심테')
+        // 특정 시트 선택
         const sheet = doc.sheetsByTitle["\bsalmal"];
         if (!sheet) {
             return res.status(404).json({ message: "Sheet not found" });
         }
 
-        // 스프레드시트에 행 추가
-        await sheet.addRow({
-            uid: json.uid,
-            나이: json.age,
-            성별: json.gender,
-            최종페이지: json.finalPage,
-            mbti: json.mbti,
-            쿠팡버튼여부: json.coupangButton,
-            공유버튼여부: json.shareButton,
-        });
+        // 모든 행 로드
+        await sheet.loadCells(); // 셀 정보 로드
+        const rows = await sheet.getRows();
+        const existingRow = rows.find(row => row.uid === json.uid);
 
-        // 성공 응답
-        res.status(200).json({ message: "Data added successfully" });
+        if (existingRow) {
+            // 일치하는 uid가 있는 경우, 행 업데이트
+            existingRow.나이 = json.age;
+            existingRow.성별 = json.gender;
+            existingRow.최종페이지 = json.finalPage;
+            existingRow.mbti = json.mbti;
+            existingRow.쿠팡버튼여부 = json.coupangButton;
+            existingRow.공유버튼여부 = json.shareButton;
+            await existingRow.save(); // 변경 사항 저장
+            res.status(200).json({ message: "Row updated successfully" });
+        } else {
+            // 일치하는 uid가 없는 경우, 새로운 행 추가
+            await sheet.addRow({
+                uid: json.uid,
+                나이: json.age,
+                성별: json.gender,
+                최종페이지: json.finalPage,
+                mbti: json.mbti,
+                쿠팡버튼여부: json.coupangButton,
+                공유버튼여부: json.shareButton,
+            });
+            res.status(200).json({ message: "Data added successfully" });
+        }
     } catch (error) {
         console.error(error);
         // 내부 서버 오류 응답
         res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
 };
+
 
 
 
