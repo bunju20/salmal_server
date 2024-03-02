@@ -54,10 +54,11 @@ module.exports = async (req, res) => {
         // 모든 행 로드
         await sheet.loadCells(); // 셀 정보 로드
         const rows = await sheet.getRows();
-        const existingRow = rows.find(row => row["uid"] === json.uid);
+        const existingRow = rows.find(row => row.uid == json.uid);
 
-        console.log(rows);
-        console.log(json.uid);
+        rows.forEach(row => {
+            console.log(row.uid);
+        });
 
         if (existingRow) {
             // 일치하는 행이 있는 경우, 해당 행 업데이트
