@@ -60,9 +60,9 @@ module.exports = async (req, res) => {
             Object.keys(json).forEach(key => {
                 console.log(key);
                 console.log(json[key]);
-                console.log(existingRow[key]);
+                console.log(existingRow._rawData[0]);
                 existingRow[key] = json[key];
-                console.log(existingRow[key]);
+                console.log(existingRow._rawData[0]);
                 
             });
             await existingRow.save(); // 변경 사항 저장
