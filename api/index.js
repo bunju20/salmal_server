@@ -58,7 +58,9 @@ module.exports = async (req, res) => {
         if (existingRow) {
             // 일치하는 행이 있는 경우, 해당 행 업데이트
             for(let i = 0; i < existingRow._rawData.length; i++){
-                const key = Object.keys(json)[i];
+                console.log(existingRow._rawData[i]);
+                let key = Object.keys(json)[i];
+                console.log(json[key]);
                 existingRow._rawData[i] = json[key];
             }
             await existingRow.save(); // 변경 사항 저장
