@@ -57,7 +57,7 @@ module.exports = async (req, res) => {
         const existingRow = rows.find(row => row[0] == json.uid);
 
         rows.forEach(row => {
-            console.log(row[0]);
+            console.log(row);
         });
         console.log(sheet.headerValues);
 
