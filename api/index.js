@@ -55,11 +55,15 @@ module.exports = async (req, res) => {
         await sheet.loadCells(); // 셀 정보 로드
         const rows = await sheet.getRows();
         const existingRow = rows.find(row => row._rawData[0]== json.uid);
+        console.log(existingRow);
 
         if (existingRow) {
             // 일치하는 행이 있는 경우, 해당 행 업데이트
             Object.keys(json).forEach(key => {
                 existingRow[key] = json[key];
+                console.log(key);
+                console.log(json[key]);
+                console.log(existingRow[key]);
             });
             await existingRow.save(); // 변경 사항 저장
         } else {
