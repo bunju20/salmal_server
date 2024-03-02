@@ -54,10 +54,10 @@ module.exports = async (req, res) => {
         // 모든 행 로드
         await sheet.loadCells(); // 셀 정보 로드
         const rows = await sheet.getRows();
-        const existingRow = rows.find(row => row.uid == json.uid);
+        const existingRow = rows.find(row => row[0] == json.uid);
 
         rows.forEach(row => {
-            console.log(row.uid);
+            console.log(row[0]);
         });
         console.log(sheet.headerValues);
 
