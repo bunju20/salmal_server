@@ -55,6 +55,8 @@ module.exports = async (req, res) => {
         await sheet.loadCells(); // 셀 정보 로드
         const rows = await sheet.getRows();
         const existingRow = rows.find(row => row.uid === json.uid);
+        console.log(rows);
+        console.log(json.uid);
 
         if (existingRow) {
             // 일치하는 uid가 있는 경우, 행 업데이트
