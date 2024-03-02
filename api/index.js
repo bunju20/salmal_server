@@ -64,6 +64,7 @@ module.exports = async (req, res) => {
                 existingRow._rawData[i] = json[key];
             }
             await existingRow.save(); // 변경 사항 저장
+            res.status(200).json({ message: "Data updated successfully" });
         } else {
             // 일치하는 uid가 없는 경우, 새로운 행 추가
             await sheet.addRow({
