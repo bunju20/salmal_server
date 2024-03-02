@@ -33,12 +33,13 @@ async function authenticateGoogleSpreadsheet() {
 
 // Vercel 서버리스 함수
 module.exports = async (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', '*'); // 모든 도메인 허용
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    if (req.method !== 'POST') {
-        return res.status(405).json({ message: 'Only POST requests are allowed' });
-    }
+    res.setHeader('Access-Control-Allow-Origin', '*'); // 모든 출처 허용
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'); // 허용 메소드
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // 허용 헤더
+  if (req.method === 'OPTIONS') {
+    // OPTIONS 요청에 대한 응답
+    return res.status(200).end();
+  }
 
     try {
         const json = req.body;
