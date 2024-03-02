@@ -54,20 +54,17 @@ module.exports = async (req, res) => {
         // 모든 행 로드
         await sheet.loadCells(); // 셀 정보 로드
         const rows = await sheet.getRows();
-        const existingRow = rows.find(row => row.uid === json.uid);
+        const existingRow = rows.find(row => row["uid"] === json.uid);
+
         console.log(rows);
         console.log(json.uid);
 
         if (existingRow) {
-            // 일치하는 uid가 있는 경우, 행 업데이트
-            existingRow.나이 = json.age;
-            existingRow.성별 = json.gender;
-            existingRow.최종페이지 = json.finalPage;
-            existingRow.mbti = json.mbti;
-            existingRow.쿠팡버튼여부 = json.coupangButton;
-            existingRow.공유버튼여부 = json.shareButton;
+            // 일치하는 행이 있는 경우, 해당 행 업데이트
+            Object.keys(json).forEach(key => {
+                existingRow[key] = json[key];
+            });
             await existingRow.save(); // 변경 사항 저장
-            res.status(200).json({ message: "Row updated successfully" });
         } else {
             // 일치하는 uid가 없는 경우, 새로운 행 추가
             await sheet.addRow({
