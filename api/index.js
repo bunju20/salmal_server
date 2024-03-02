@@ -53,6 +53,7 @@ module.exports = async (req, res) => {
 
         // 스프레드시트에 행 추가
         await sheet.addRow({
+            uid: json.uid,
             나이: json.age,
             성별: json.gender,
             최종페이지: json.finalPage,
