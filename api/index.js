@@ -49,7 +49,7 @@ module.exports = async (req, res) => {
         const doc = await authenticateGoogleSpreadsheet();
 
         // 특정 시트 선택
-        const sheet = doc.sheetsByTitle["\bsalmal_food"];
+        const sheet = doc.sheetsByTitle["\bsalmal"];
         if (!sheet) {
             return res.status(404).json({ message: "Sheet not found" });
         }
